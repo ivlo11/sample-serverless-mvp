@@ -5,7 +5,7 @@ import io.devwidgets.events.domain.model.dbconverter.OffsetDateTimeConverter;
 
 import java.time.OffsetDateTime;
 
-@DynamoDBTable(tableName = "Events")
+@DynamoDBTable(tableName = "EventDetails")
 public class Event {
   private String id;
   private String description;

@@ -34,7 +34,6 @@ Resources:
           POWERTOOLS_LOG_LEVEL: DEBUG
           POWERTOOLS_TRACER_CAPTURE_RESPONSE: false
           POWERTOOLS_TRACER_CAPTURE_ERROR: true
-      FunctionName: event-ms
       AutoPublishAlias: Latest
       ReservedConcurrentExecutions: 5
       ProvisionedConcurrencyConfig:
@@ -68,7 +67,7 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
-      TableName: Events
+      TableName: EventDetails
       Tags:
         channel: presentation
         series: serverless-mvp
