@@ -35,9 +35,10 @@ Resources:
           POWERTOOLS_TRACER_CAPTURE_RESPONSE: false
           POWERTOOLS_TRACER_CAPTURE_ERROR: true
       FunctionName: event-ms
+      AutoPublishAlias: Latest
       ReservedConcurrentExecutions: 5
       ProvisionedConcurrencyConfig:
-        ProvisionedConcurrentExecutions: 5
+        ProvisionedConcurrentExecutions: 1
       Events:
         ProxyApiGreedy:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
