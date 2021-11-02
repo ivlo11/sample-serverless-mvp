@@ -3,41 +3,84 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   events
 
-  Sample SAM Template for events
+  SAM Template for an events microservice
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
+  Api:
+    TracingEnabled: True
   Function:
     Timeout: 20
+    Tracing: Active
 
 Resources:
-  HelloWorldFunction:
+  ApiDeployment:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+
+  EventsMsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: HelloWorldFunction
-      Handler: helloworld.App::handleRequest
+      CodeUri: events-ms
+      Handler: io.devwidgets.events.api.lambda.LambdaHandler::handleRequest
       Runtime: java11
       MemorySize: 512
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          PARAM1: VALUE
+          POWERTOOLS_SERVICE_NAME: events-ms
+          POWERTOOLS_METRICS_NAMESPACE: devwidgets
+          POWERTOOLS_LOGGER_SAMPLE_RATE: 0.2
+          POWERTOOLS_LOG_LEVEL: DEBUG
+          POWERTOOLS_TRACER_CAPTURE_RESPONSE: false
+          POWERTOOLS_TRACER_CAPTURE_ERROR: true
+      FunctionName: event-ms
+      AutoPublishAlias: Latest
+      ReservedConcurrentExecutions: 5
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 1
       Events:
-        HelloWorld:
+        ProxyApiGreedy:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref ApiDeployment
+      Policies:
+        - Statement:
+            - Sid: DynamoDBReadPolicy
+              Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:Scan
+              Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${EventsDynamoDbTable}
+      Tags:
+        channel: presentation
+        series: serverless-mvp
+        episode: reInvent
+
+  EventsDynamoDbTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: Id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: Events
+      Tags:
+        channel: presentation
+        series: serverless-mvp
+        episode: reInvent
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
+  EventsMsApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
+    Value: !Sub "https://${ApiDeployment}.execute-api.${AWS::Region}.amazonaws.com/v1/events/"
+  EventsMsFunction:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
+    Value: !GetAtt EventsMsFunction.Arn
+  EventsMsFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt EventsMsFunctionRole.Arn
