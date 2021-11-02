@@ -9,9 +9,6 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import io.devwidgets.events.framework.SpringBootApplicationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.lambda.powertools.logging.Logging;
-import software.amazon.lambda.powertools.metrics.Metrics;
-import software.amazon.lambda.powertools.tracing.Tracing;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +27,9 @@ public class LambdaHandler implements RequestStreamHandler {
     }
   }
 
-  @Logging(logEvent = true)
-  @Tracing
-  @Metrics(captureColdStart = true)
+//  @Logging(logEvent = true)
+//  @Tracing
+//  @Metrics(captureColdStart = true)
   @Override
   public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
     logger.info("Proxy Stream");

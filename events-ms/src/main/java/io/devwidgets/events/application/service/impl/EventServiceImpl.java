@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
-import software.amazon.lambda.powertools.tracing.Tracing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class EventServiceImpl implements IEventService {
     this.eventRepositoryService = eventRepositoryService;
   }
 
-  @Tracing(namespace = "getEvent")
+//  @Tracing(namespace = "getEvent")
   @Override
   public EventDto getEvent(String id) {
     if (StringUtils.isEmpty(id)) {
@@ -37,7 +36,7 @@ public class EventServiceImpl implements IEventService {
     return convertToDto(eventById);
   }
 
-  @Tracing(namespace = "getEvents")
+//  @Tracing(namespace = "getEvents")
   @Override
   public List<EventDto> getEvents() {
     List<Event> allEvents = eventRepositoryService.findAllEvents();
@@ -49,7 +48,7 @@ public class EventServiceImpl implements IEventService {
     return convertToDtos(allEvents);
   }
 
-  @Tracing(namespace = "convertToDtos")
+//  @Tracing(namespace = "convertToDtos")
   private List<EventDto> convertToDtos(List<Event> allEvents) {
     List<EventDto> eventDtos = new ArrayList<>();
 
@@ -61,7 +60,7 @@ public class EventServiceImpl implements IEventService {
     return eventDtos;
   }
 
-  @Tracing(namespace = "convertToDto")
+//  @Tracing(namespace = "convertToDto")
   private EventDto convertToDto(Event event) {
     EventDto eventDto = new EventDto();
     eventDto.setDate(event.getDate());
