@@ -25,7 +25,6 @@ Resources:
       CodeUri: events-ms
       Handler: io.devwidgets.events.api.lambda.LambdaHandler::handleRequest
       Runtime: java11
-      Architectures: ["arm64"]
       MemorySize: 512
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
