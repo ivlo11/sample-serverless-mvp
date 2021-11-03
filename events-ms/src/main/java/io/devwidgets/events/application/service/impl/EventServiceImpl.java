@@ -5,6 +5,8 @@ import io.devwidgets.events.api.dto.EventDto;
 import io.devwidgets.events.application.service.IEventService;
 import io.devwidgets.events.domain.model.Event;
 import io.devwidgets.events.domain.service.IEventRepositoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,6 +18,7 @@ import java.util.List;
 @XRayEnabled
 @Service
 public class EventServiceImpl implements IEventService {
+  private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
   private final IEventRepositoryService eventRepositoryService;
 
@@ -29,8 +32,17 @@ public class EventServiceImpl implements IEventService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No id found in the request");
     }
 
-    Event eventById = eventRepositoryService.findEventById(id);
+    logger.info("finding '{}'", id);
+    Event eventById = null;
+
+    try {
+      eventById = eventRepositoryService.findEventById(id);
+    } catch (Throwable t) {
+      logger.error("get failed", t);
+    }
+
     if (eventById == null) {
+      logger.error("No event found matching id({})", id);
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No event found matching id(" + id + ")");
     }
 
@@ -39,7 +51,13 @@ public class EventServiceImpl implements IEventService {
 
   @Override
   public List<EventDto> getEvents() {
-    List<Event> allEvents = eventRepositoryService.findAllEvents();
+    List<Event> allEvents = new ArrayList<>();
+
+    try {
+      allEvents = eventRepositoryService.findAllEvents();
+    } catch (Throwable t) {
+      logger.error("getEvents failed", t);
+    }
 
     if (allEvents == null || allEvents.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No events found");
