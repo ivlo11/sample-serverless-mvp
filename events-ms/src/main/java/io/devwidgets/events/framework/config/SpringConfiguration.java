@@ -28,7 +28,7 @@ public class SpringConfiguration implements WebMvcConfigurer {
   @Bean
   public Filter TracingFilter() {
     logger.info("adding TracingFilter");
-    return new AWSXRayServletFilter("events-ms");
+    return new AWSXRayServletFilter();
   }
 
 }

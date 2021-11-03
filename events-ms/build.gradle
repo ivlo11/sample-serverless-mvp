@@ -23,6 +23,8 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk-dynamodb:1.12.90')
     implementation('com.amazonaws:aws-lambda-java-core:1.2.1')
     implementation('com.amazonaws:aws-lambda-java-events:3.10.0')
+    implementation('com.amazonaws:aws-xray-recorder-sdk-aws-sdk:2.10.0')
+    implementation('com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor:2.10.0')
     implementation('com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2:2.10.0')
     implementation('com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2-instrumentor:2.10.0')
     implementation('com.amazonaws:aws-xray-recorder-sdk-core:2.10.0')
