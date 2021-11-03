@@ -26,14 +26,6 @@ Resources:
       Handler: io.devwidgets.events.api.lambda.LambdaHandler::handleRequest
       Runtime: java11
       MemorySize: 512
-      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-        Variables:
-          POWERTOOLS_SERVICE_NAME: events-ms
-          POWERTOOLS_METRICS_NAMESPACE: devwidgets
-          POWERTOOLS_LOGGER_SAMPLE_RATE: 0.2
-          POWERTOOLS_LOG_LEVEL: DEBUG
-          POWERTOOLS_TRACER_CAPTURE_RESPONSE: false
-          POWERTOOLS_TRACER_CAPTURE_ERROR: true
       AutoPublishAlias: Latest
       ReservedConcurrentExecutions: 5
       ProvisionedConcurrencyConfig:

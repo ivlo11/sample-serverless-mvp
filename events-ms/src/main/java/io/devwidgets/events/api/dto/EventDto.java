@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 public class EventDto {
   private String description;
   private OffsetDateTime date;
+  private String id;
 
   public String getDescription() {
     return description;
@@ -20,5 +21,13 @@ public class EventDto {
 
   public void setDate(OffsetDateTime date) {
     this.date = date;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }
