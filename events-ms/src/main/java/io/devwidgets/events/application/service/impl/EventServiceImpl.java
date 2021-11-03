@@ -1,5 +1,6 @@
 package io.devwidgets.events.application.service.impl;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import io.devwidgets.events.api.dto.EventDto;
 import io.devwidgets.events.application.service.IEventService;
 import io.devwidgets.events.domain.model.Event;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
+@XRayEnabled
 @Service
 public class EventServiceImpl implements IEventService {
 
@@ -21,10 +23,9 @@ public class EventServiceImpl implements IEventService {
     this.eventRepositoryService = eventRepositoryService;
   }
 
-//  @Tracing(namespace = "getEvent")
   @Override
   public EventDto getEvent(String id) {
-    if (StringUtils.isEmpty(id)) {
+    if (!StringUtils.hasText(id)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No id found in the request");
     }
 
@@ -36,7 +37,6 @@ public class EventServiceImpl implements IEventService {
     return convertToDto(eventById);
   }
 
-//  @Tracing(namespace = "getEvents")
   @Override
   public List<EventDto> getEvents() {
     List<Event> allEvents = eventRepositoryService.findAllEvents();
@@ -48,7 +48,6 @@ public class EventServiceImpl implements IEventService {
     return convertToDtos(allEvents);
   }
 
-//  @Tracing(namespace = "convertToDtos")
   private List<EventDto> convertToDtos(List<Event> allEvents) {
     List<EventDto> eventDtos = new ArrayList<>();
 
@@ -60,11 +59,11 @@ public class EventServiceImpl implements IEventService {
     return eventDtos;
   }
 
-//  @Tracing(namespace = "convertToDto")
   private EventDto convertToDto(Event event) {
     EventDto eventDto = new EventDto();
     eventDto.setDate(event.getDate());
     eventDto.setDescription(event.getDescription());
+    eventDto.setId(event.getId());
     return eventDto;
   }
 }
