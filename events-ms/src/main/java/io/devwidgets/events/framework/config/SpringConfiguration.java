@@ -1,17 +1,12 @@
 package io.devwidgets.events.framework.config;
 
-import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
-import com.amazonaws.xray.strategy.SegmentNamingStrategy;
 import io.devwidgets.events.framework.interceptor.LoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.servlet.Filter;
 
 @Configuration
 public class SpringConfiguration implements WebMvcConfigurer {
@@ -25,11 +20,4 @@ public class SpringConfiguration implements WebMvcConfigurer {
     logger.info("adding interceptor");
     registry.addInterceptor(loggingInterceptor);
   }
-
-  @Bean
-  public Filter TracingFilter() {
-    logger.info("adding TracingFilter");
-    return new AWSXRayServletFilter(SegmentNamingStrategy.dynamic("event-ms"));
-  }
-
 }

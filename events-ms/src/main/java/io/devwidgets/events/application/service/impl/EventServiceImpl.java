@@ -1,6 +1,5 @@
 package io.devwidgets.events.application.service.impl;
 
-import com.amazonaws.xray.spring.aop.XRayEnabled;
 import io.devwidgets.events.api.dto.EventDto;
 import io.devwidgets.events.application.service.IEventService;
 import io.devwidgets.events.domain.model.Event;
@@ -15,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-@XRayEnabled
 @Service
 public class EventServiceImpl implements IEventService {
   private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);

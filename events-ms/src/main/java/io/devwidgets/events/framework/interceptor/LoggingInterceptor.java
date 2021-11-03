@@ -18,6 +18,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
   private static Boolean isColdStart;
 
   public static void init(Context pContext) {
+    MDC.clear();
     MDC.put("coldStart", isColdStart == null ? "true" : isColdStart.toString());
     MDC.put("startTime", String.valueOf(System.currentTimeMillis()));
     if (pContext != null) {
