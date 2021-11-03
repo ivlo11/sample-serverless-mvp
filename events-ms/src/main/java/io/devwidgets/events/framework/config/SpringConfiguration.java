@@ -1,6 +1,7 @@
 package io.devwidgets.events.framework.config;
 
 import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
+import com.amazonaws.xray.strategy.SegmentNamingStrategy;
 import io.devwidgets.events.framework.interceptor.LoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class SpringConfiguration implements WebMvcConfigurer {
   @Bean
   public Filter TracingFilter() {
     logger.info("adding TracingFilter");
-    return new AWSXRayServletFilter();
+    return new AWSXRayServletFilter(SegmentNamingStrategy.dynamic("event-ms"));
   }
 
 }
